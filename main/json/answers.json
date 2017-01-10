@@ -1,0 +1,32 @@
+[		
+	{
+		"id" : "1",
+		"jsonVal": "OPEL ASTRA",
+		"img": "1.png" 
+	},
+	{
+		"id" : "2",
+		"jsonVal": "MERCEDES BENZ",
+		"img": "2.png"
+	},
+	{
+		"id" : "3",
+		"jsonVal": "PORSHE",
+		"img": "3.png"
+	},
+	{
+		"id" : "4",
+		"jsonVal": "LAMBORGHINI GALLARDO",
+		"img": "4.png"
+	},
+	{
+		"id" : "5",
+		"jsonVal": "FIAT PUNTO",
+		"img": "5.png"
+	},
+	{
+		"id" : "6",
+		"jsonVal": "FORD FOCUS",
+		"img": "6.png"
+	}
+]	

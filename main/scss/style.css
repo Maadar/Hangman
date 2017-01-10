@@ -1,0 +1,11 @@
+body {
+  background: #333333;
+  color: #FFFFFF; }
+  body .well {
+    background: white;
+    border-radius: 0;
+    text-align: center;
+    padding: 0; }
+  body .name {
+    color: #000000;
+    text-transform: uppercase; }
