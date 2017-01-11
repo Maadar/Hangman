@@ -26,46 +26,90 @@ app.controller("mainCtrl", function($scope, answersService) {
 	$scope.letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "W", "Y", "Z"];
 
 	var config = {
-		test : "Just a test",
-		charCounter : 0
+		charCounter : 0,
+		displayStartBtn : true,
+		isAlreadyDrawn : [],
+		attempts : 6,
+		chosenWord : ""
 	};
 	$scope.config = config;
- 
-	$scope.start = function() {
-		//draw random word from answers.json
-	    $scope.chosenWord = $scope.answer[Math.floor(Math.random() * $scope.answer.length)];
-		console.log($scope.chosenWord.jsonVal);
-		convertString();
-	}
 
-	var convertString = function() {
-		config.charCounter = $scope.chosenWord.jsonVal.length;
-		$scope.hiddenPassword = "";
-		$scope.new = "";
-		//add " " when space appear "-" for the others
-		for(i = 0; i < config.charCounter; i++) {
-			($scope.chosenWord.jsonVal.charAt(i).charCodeAt() === 32) 
-			? $scope.hiddenPassword = $scope.hiddenPassword + " "
-			: $scope.hiddenPassword = $scope.hiddenPassword + "-"
-		}
-		console.log($scope.hiddenPassword); 
-	}
+	var convert = {
+		charCounter : 0,
+		hiddenPassword : ""
+	};
+	$scope.convert = convert;
 	
-	//created function, which 
+	config.displayStartBtn;
+ 	config.isAlreadyDrawn;
+	
 	String.prototype.setLetter = function(place, character, index) {
 		if (place > this.length -1) return this.toString(); //check length and protect against check letter, which doesn't exist and be sure it is converted on string
 		else return this.substr(0, place) + character + this.substr(place + 1);
 	} 
 
+	$scope.start = function() {
+		//draw random word from answers.json
+	    config.chosenWord = $scope.answer[Math.floor(Math.random() * $scope.answer.length)];
+		console.log(config.chosenWord.jsonVal);
+		isAlreadyDrawn(); 
+		convertString();
+	}
+
 	//check exist letters in string and switch "-" on letter
 	$scope.check = function(index, letter) {
-		//contain clicked letter
-		console.log($scope.letters[letter, index]);
+		console.log($scope.letters[letter, index]); //contain clicked letter
 		//iterate via each letter and check if this letter is equal to the button value
 		for (i=0; i<config.charCounter; i++) { //charCounter contains int
-			if ($scope.chosenWord.jsonVal.charAt(i) == $scope.letters[letter, index]) { //letter contains value of the button, index contains correct number of the button
-				$scope.hiddenPassword = $scope.hiddenPassword.setLetter(i, letter, index);
-				console.log($scope.hiddenPassword);
+			if (config.chosenWord.jsonVal.charAt(i) == $scope.letters[letter, index]) { //letter contains value of the button, index contains correct number of the button
+				convert.hiddenPassword = convert.hiddenPassword.setLetter(i, letter, index);
+				console.log(convert.hiddenPassword);
+			}
+		}
+		finishAlert();
+	}
+
+	//convert string on password
+	var convertString = function() {
+		config.charCounter = config.chosenWord.jsonVal.length;
+		convert.hiddenPassword = "";
+		//add " " when space appear "-" for the others
+		for(i = 0; i < config.charCounter; i++) {
+			(config.chosenWord.jsonVal.charAt(i).charCodeAt() === 32) 
+			? convert.hiddenPassword = convert.hiddenPassword + " "
+			: convert.hiddenPassword = convert.hiddenPassword + "-"
+		}
+		console.log(convert.hiddenPassword); 
+	}			
+
+	//function checks if word is already drawn. If true, push to the array and dont draw it again
+	var isAlreadyDrawn = function () {
+		if (config.isAlreadyDrawn.indexOf(config.chosenWord.jsonVal) == -1) {
+			config.isAlreadyDrawn.push(config.chosenWord.jsonVal);
+			console.log(config.isAlreadyDrawn);
+		} 
+		else {
+			do {
+				console.log(config.chosenWord.jsonVal);
+				for (i = 0; i <= config.isAlreadyDrawn.length; i++) {
+					config.chosenWord = $scope.answer[Math.floor(Math.random() * $scope.answer.length)];
+					if (config.isAlreadyDrawn[i] == config.chosenWord.jsonVal) {
+					    console.log(config.chosenWord.jsonVal);
+					}
+				}
+			} while (config.isAlreadyDrawn.indexOf(config.chosenWord.jsonVal) != -1);
+		config.isAlreadyDrawn.push(config.chosenWord.jsonVal);
+		console.log(config.isAlreadyDrawn);
+		}
+		finishAlert();
+	}
+
+	//finish alert, which should display modal with info
+	var finishAlert = function() {
+		if (config.isAlreadyDrawn.length == 6) {
+			config.displayStartBtn = false;
+			if (convert.hiddenPassword == config.chosenWord.jsonVal) {
+				console.log("TAK"); // modal will be displayed 
 			}
 		}
 	}

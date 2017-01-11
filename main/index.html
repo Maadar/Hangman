@@ -8,11 +8,12 @@
 	</head>
 	<body ng-app="mainApp" ng-controller="mainCtrl">
 	<div class="well name"><h1>hangman</h1></div>	
-		<h2>{{ config.test }}</h2>
-		<button class="btn btn-info" ng-click="start()">START</button>
+		<button class="btn btn-info" ng-show="config.displayStartBtn" ng-click="start()">START</button>
 		<div class="buttons">
-			<button class="btn btn-warning" ng-repeat="letter in letters" ng-click="check($index, letter);">{{ letter }}</button>
+			<button class="btn btn-warning" ng-repeat="letter in letters" ng-click="check($index, letter)" ng-disabled="disableClickedButton">{{ letter }}</button>
 		</div>
+		<h2> {{ convert.hiddenPassword }} </h2>
+		<h2> {{ config.attempts }} </h2>
 		<!-- libraries -->
 		<script src="node_modules/jquery/dist/jquery.min.js"></script>
 		<script src="node_modules/angular/angular.min.js"></script>
