@@ -1,7 +1,7 @@
 //main module
 var app = angular.module("mainApp", []);
 
-//service which load answers.json
+//service which loads answers.json
 app.service("answersService", function($http, $q) {
     var deferred = $q.defer(); 
     $http.get('json/answers.json').success(function(data) {
@@ -27,7 +27,6 @@ app.controller("mainCtrl", function($scope, answersService) {
 
 	var config = {
 		charCounter : 0,
-		displayStartBtn : true,
 		isAlreadyDrawn : [],
 		attempts : 6,
 		chosenWord : "",
@@ -41,8 +40,20 @@ app.controller("mainCtrl", function($scope, answersService) {
 		hiddenPassword : ""
 	};
 	$scope.convert = convert;
-	
-	config.displayStartBtn;
+
+	var alert = {
+		showSuccessAlert : true,
+		showDefeatAlert : true
+	}
+	$scope.alert = alert;
+
+	var buttons = {
+		displayStartBtn : true,
+		displayNextBtn : false
+	}
+	$scope.buttons = buttons;
+
+	buttons.displayStartBtn;
  	config.isAlreadyDrawn;
  	$scope.disableClickedButton = false;
 	
@@ -53,16 +64,19 @@ app.controller("mainCtrl", function($scope, answersService) {
 
 	$scope.start = function() {
 		//draw random word from answers.json
-	    config.chosenWord = $scope.answer[Math.floor(Math.random() * $scope.answer.length)];
-		console.log(config.chosenWord.jsonVal);
+		configuration();
 		isAlreadyDrawn(); 
 		convertString();
-		config.attempts = 6;
-		$scope.disableClickedButton = false;
-		
-		if (config.attempts == 6) { config.displayHangmanImage = $scope.answer[0].img; } 
+		buttons.displayNextBtn = true;
+	}
 
-		}
+	$scope.next = function() {
+		configuration();
+		isAlreadyDrawn(); 
+		convertString();
+		alert.showSuccessAlert = true;
+		alert.showDefeatAlert = true;
+	}
 
 	//check exist letters in string and switch "-" on letter
 	$scope.check = function(index, letter) {
@@ -92,10 +106,12 @@ app.controller("mainCtrl", function($scope, answersService) {
 		} else this.disableClickedButton = true;
 		finishAlert();
 		//info about defeat
-		if (config.attempts == 0) {
+		if (config.attempts == 0){
 			console.log("Przegrales");
 			$scope.disableClickedButton = true;
-		}
+			alert.showDefeatAlert = false;
+		} 
+		if ((config.attempts !=0) && (convert.hiddenPassword == config.chosenWord.jsonVal)) alert.showSuccessAlert = false;
 	}
 
 	//convert string on password
@@ -136,10 +152,19 @@ app.controller("mainCtrl", function($scope, answersService) {
 	//finish alert, which should display modal with info
 	var finishAlert = function() {
 		if (config.isAlreadyDrawn.length == 6) {
-			config.displayStartBtn = false;
+			buttons.displayNextBtn = false;
 			if (convert.hiddenPassword == config.chosenWord.jsonVal) {
 				console.log("display modal with info"); // modal will be displayed 
 			}
 		}
+	}
+
+	var configuration = function() {
+		config.attempts = 6;
+		if (config.attempts == 6) { config.displayHangmanImage = $scope.answer[0].img; } 
+		config.chosenWord = $scope.answer[Math.floor(Math.random() * $scope.answer.length)];
+		console.log(config.chosenWord.jsonVal);
+		$scope.disableClickedButton = false;
+		buttons.displayStartBtn = false;
 	}
 });

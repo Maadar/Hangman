@@ -6,17 +6,32 @@
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="scss/style.css">
 	</head>
-	<body ng-app="mainApp" ng-controller="mainCtrl">
-	<div class="well name"><h1>hangman</h1></div>	
-		<button class="btn btn-info" ng-show="config.displayStartBtn" ng-click="start()">START</button>
+	<body data-ng-app="mainApp" data-ng-controller="mainCtrl">
+	<div class="text-center">
+		<div class="well name"><h1>hangman</h1></div>	
+		<button class="btn startButton" data-ng-show="buttons.displayStartBtn" data-ng-click="start()">START</button>
+		<button class="btn nextButton" data-ng-show="buttons.displayNextBtn" data-ng-click="next()">NEXT</button>
 		<div class="buttons">
-			<button class="btn btn-warning" ng-repeat="letter in letters" ng-click="check($index, letter)" ng-disabled="disableClickedButton">{{ letter }}</button>
+			<button class="btn lettersButtons" data-ng-repeat="letter in letters" data-ng-click="check($index, letter)" data-ng-disabled="disableClickedButton">{{ letter }}</button>
 		</div>
-		<h2> {{ convert.hiddenPassword }} </h2>
-		<h2> {{ config.attempts }} </h2>
-		<img ng-src="{{ config.displayHangmanImage }}" alt="">
+		<h2> Your attempts: {{ config.attempts }} </h2>
+		<div class="displayPassword">
+			<h2> {{ convert.hiddenPassword }} </h2>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">	
+				<img data-ng-src="{{ config.displayHangmanImage }}" alt="">
+			</div>
+			<div class="col-md-9">
+				<div class="alertSuccess" data-ng-hide="alert.showSuccessAlert">Success</div>
+				<div class="alertDefeat" data-ng-hide="alert.showDefeatAlert">Defeat</div>
+			</div>
+		</div>
+	</div>
 		<!-- libraries -->
-		<script src="node_modules/jquery/dist/jquery.min.js"></script>
+		<script src="node_modules/jquery/dist/jquery.min.js"></script>		
 		<script src="node_modules/angular/angular.min.js"></script>
 		<script src="js/app.js"></script>
 	</body>
