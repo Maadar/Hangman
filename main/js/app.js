@@ -30,7 +30,9 @@ app.controller("mainCtrl", function($scope, answersService) {
 		displayStartBtn : true,
 		isAlreadyDrawn : [],
 		attempts : 6,
-		chosenWord : ""
+		chosenWord : "",
+		strikedLetter : true,
+		displayHangmanImage : ""
 	};
 	$scope.config = config;
 
@@ -42,6 +44,7 @@ app.controller("mainCtrl", function($scope, answersService) {
 	
 	config.displayStartBtn;
  	config.isAlreadyDrawn;
+ 	$scope.disableClickedButton = false;
 	
 	String.prototype.setLetter = function(place, character, index) {
 		if (place > this.length -1) return this.toString(); //check length and protect against check letter, which doesn't exist and be sure it is converted on string
@@ -54,19 +57,45 @@ app.controller("mainCtrl", function($scope, answersService) {
 		console.log(config.chosenWord.jsonVal);
 		isAlreadyDrawn(); 
 		convertString();
-	}
+		config.attempts = 6;
+		$scope.disableClickedButton = false;
+		
+		if (config.attempts == 6) { config.displayHangmanImage = $scope.answer[0].img; } 
+
+		}
 
 	//check exist letters in string and switch "-" on letter
 	$scope.check = function(index, letter) {
+		config.strikedLetter = true;
 		console.log($scope.letters[letter, index]); //contain clicked letter
 		//iterate via each letter and check if this letter is equal to the button value
 		for (i=0; i<config.charCounter; i++) { //charCounter contains int
 			if (config.chosenWord.jsonVal.charAt(i) == $scope.letters[letter, index]) { //letter contains value of the button, index contains correct number of the button
 				convert.hiddenPassword = convert.hiddenPassword.setLetter(i, letter, index);
+				config.strikedLetter = false;
 				console.log(convert.hiddenPassword);
 			}
 		}
+
+		if (config.strikedLetter == true) {
+			config.attempts = config.attempts - 1;
+			this.disableClickedButton = true;
+			
+		// display images when letter is missed
+		if 		(config.attempts == 5) { config.displayHangmanImage = $scope.answer[1].img; } 
+		else if (config.attempts == 4) { config.displayHangmanImage = $scope.answer[2].img; }
+		else if (config.attempts == 3) { config.displayHangmanImage = $scope.answer[3].img; }
+		else if (config.attempts == 2) { config.displayHangmanImage = $scope.answer[4].img; }
+		else if (config.attempts == 1) { config.displayHangmanImage = $scope.answer[5].img; }
+		else if (config.attempts == 0) { config.displayHangmanImage = $scope.answer[6].img; }
+
+		} else this.disableClickedButton = true;
 		finishAlert();
+		//info about defeat
+		if (config.attempts == 0) {
+			console.log("Przegrales");
+			$scope.disableClickedButton = true;
+		}
 	}
 
 	//convert string on password
@@ -109,7 +138,7 @@ app.controller("mainCtrl", function($scope, answersService) {
 		if (config.isAlreadyDrawn.length == 6) {
 			config.displayStartBtn = false;
 			if (convert.hiddenPassword == config.chosenWord.jsonVal) {
-				console.log("TAK"); // modal will be displayed 
+				console.log("display modal with info"); // modal will be displayed 
 			}
 		}
 	}

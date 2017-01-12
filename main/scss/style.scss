@@ -4,10 +4,13 @@ body {
 	background: $color-bg;
 	color: $color-text;
 	.well {
-		background:white;
+		background:#222222;
 		border-radius:0;
+		border:0;
 		text-align:center;
-		padding:0;
+		h1 {
+			color:#FFFFFF;
+		}
 	}
 	.name {
 		color:#000000;
