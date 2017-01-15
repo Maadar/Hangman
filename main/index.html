@@ -12,7 +12,7 @@
 		<button class="btn startButton" data-ng-show="buttons.displayStartBtn" data-ng-click="start()">START</button>
 		<button class="btn nextButton" data-ng-show="buttons.displayNextBtn" data-ng-click="next()">NEXT</button>
 		<div class="buttons">
-			<button class="btn lettersButtons" data-ng-repeat="letter in letters" data-ng-click="check($index, letter)" data-ng-disabled="disableClickedButton">{{ letter }}</button>
+			<button class="btn lettersButtons" data-ng-repeat="letter in letters" data-ng-click="check($index, letter)" data-ng-disabled="buttons.disableClickedButton">{{ letter }}</button>
 		</div>
 		<h2> Your attempts: {{ config.attempts }} </h2>
 		<div class="displayPassword">

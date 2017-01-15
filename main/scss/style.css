@@ -40,8 +40,8 @@ body {
   body .lettersButtons {
     color: #ffffff;
     background: #a5a5a5;
-    margin-left: 1rem;
-    width: 4.8rem;
+    margin: 0 0.5rem;
+    width: 4rem;
     height: 4.8rem;
     font-size: 2rem;
     font-weight: 700;
